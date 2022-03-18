@@ -1,5 +1,6 @@
 import logo from './logo.svg';
 import './App.css';
+import { useEffect, useState } from 'react';
 
 
 const fighters =[
@@ -14,18 +15,50 @@ function App() {
   return (
     <div className="App">
       
-      {
-        fighters.map(fighter => <Person name={fighter.name} weightClass={fighter.weightClass}></Person>)
-      }
-      {/* <Person name ={fighters[0]} weithtClass="lightweight"></Person>
-      <Person name={fighters[1]} weithtClass="walterWeight"></Person>
-      <Person name="khamzat" weithtClass="lightweight"></Person>
-      <Person name="la quinta" weithtClass="featherweight"></Person> */}
-      <h3>New Component</h3>
-      <Friend></Friend>
-
+    <Counter></Counter>
+    <ExternalUsers></ExternalUsers>
     </div>
   );
+}
+
+function ExternalUsers(){
+  const [users, setUsers] = useState([]);
+  useEffect(() => {
+    fetch('https://jsonplaceholder.typicode.com/users')
+    .then(res => res.json())
+    .then(data => setUsers(data))
+  }, [])
+  return (
+    <div>
+      <h2>External Users</h2>
+      <p>{users.length}</p>
+      {
+        users.map(user => <Users name={user.name} email={user.email}></Users>)
+      }
+    </div>
+  )
+}
+
+function Users(props){
+  return(
+    <div>
+      <h3> Name: {props.name} </h3>
+      <h4>Email: {props.email}</h4>
+    </div>
+  )
+}
+
+function Counter(){
+  const [count, setCount] = useState(7)
+  const increaseCount = () => setCount(count + 1)
+  const decreaseCount = () => setCount(count - 1)
+  return(
+    <div>
+      <h1>Count:{count}</h1>
+      <button onClick={increaseCount}>Increase</button>
+      <button onClick={decreaseCount}>Decrease</button>
+    </div>
+  )
 }
 
 function Person(props){
